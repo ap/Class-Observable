@@ -64,9 +64,7 @@ sub delete_all_observers {
 
 # Backward compatibility
 
-sub delete_observers {
-    goto \&delete_all_observers;
-}
+*delete_observers = \&delete_all_observers;
 
 
 # Tell all observers that a state-change has occurred. No return
