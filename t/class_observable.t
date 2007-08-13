@@ -1,6 +1,6 @@
 use strict; use warnings;
 
-use Test::More tests => 17;
+use Test::More tests => 10;
 use Class::Observable;
 
 use lib 't/lib';
@@ -38,21 +38,3 @@ is( $dj_moby->num_updates_self, do { 2 * grep $_->{'band'} eq 'Moby', @playlist 
     '... and recognised updates for his own songs' );
 is( $dj_help->num_updates, 2,
     'Guest got notified about start and end of the song instance he was interested in' );
-
-my $num_observers_copied = eval {
-    $playlist[0]->copy_observers( $playlist[1] )
-};
-ok( ! $@, 'Copied observers run' );
-is( $num_observers_copied, 3,
-    'Copied correct number of observers' );
-is( $playlist[1]->count_observers, 5,
-    'New object has correct number of observers' );
-
-is( $playlist[0]->delete_all_observers, 1,
-    'Delete object-level observers' );
-is( $playlist[1]->delete_all_observers, 3,
-    'Delete object-level observers' );
-is( Song->delete_observer( $dj ), 1,
-    'Delete object from class-level observers' );
-is( Song->delete_all_observers, 1,
-    'Delete remaining class-level observers' );
