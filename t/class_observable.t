@@ -28,16 +28,16 @@ is( $playlist[0]->count_observers, 3,
 
 $dj->start_party;
 
-is( $dj->num_updates, 8,
-    'Total observations from starter' );
-is( $dj->num_updates_stop, 4,
-    'Catch observations from starter' );
-is( $dj_moby->num_updates, 8,
-    'Count observations from secondary' );
-is( $dj_moby->num_updates_self, 2,
-    'Catch observations from secondary' );
+is( $dj->num_updates, 2 * @playlist,
+    'Main DJ got notified of start and end for all songs...' );
+is( $dj->num_updates_stop, 1 * @playlist,
+    '... and for the end of them all' );
+is( $dj_moby->num_updates, 2 * @playlist,
+    'Secondary DJ got notified of start and end for all songs...' );
+is( $dj_moby->num_updates_self, do { 2 * grep $_->{'band'} eq 'Moby', @playlist },
+    '... and recognised updates for his own songs' );
 is( $dj_help->num_updates, 2,
-    'Count observations from object-level observer' );
+    'Guest got notified about start and end of the song instance he was interested in' );
 
 my $num_observers_copied = eval {
     $playlist[0]->copy_observers( $playlist[1] )

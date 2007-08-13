@@ -22,8 +22,8 @@ sub observer_c { push @observations, "Observation C from [" . ref( $_[0] ) . "]"
 is( Parent->add_observer( \&observer_a ), 1, "Add observer A to class" );
 is( Child->add_observer( \&observer_b ), 1, "Add observer B to class" );
 
-is( Parent->count_observers, 1, "Count observers in class" );
-is( Child->count_observers, 2, "Count observers in class" );
+is( Parent->count_observers, 1, 'One observer in Foo...' );
+is( Child->count_observers, 2, '... but two in Baz' );
 
 my $foo = Parent->new;
 $foo->yodel;
