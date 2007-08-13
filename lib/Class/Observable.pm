@@ -217,7 +217,7 @@ Class::Observable - Allow other classes and objects to respond to events in your
  
   package My::Object;
  
-  use base qw( Class::Observable );
+  use parent qw( Class::Observable );
  
   # Tell all classes/objects observing this object that a state-change
   # has occurred
@@ -290,7 +290,7 @@ Class::Observable - Allow other classes and objects to respond to events in your
   package My::Parent;
  
   use strict;
-  use base qw( Class::Observable );
+  use parent qw( Class::Observable );
  
   sub prepare_for_bed {
       my ( $self ) = @_;
@@ -310,7 +310,7 @@ Class::Observable - Allow other classes and objects to respond to events in your
   package My::Child;
  
   use strict;
-  use base qw( My::Parent );
+  use parent qw( My::Parent );
  
   sub brush_teeth {
       my ( $self ) = @_;
@@ -397,12 +397,12 @@ So given the following example:
 
  BEGIN {
      package Foo;
-     use base qw( Class::Observable );
+     use parent qw( Class::Observable );
      sub new { return bless( {}, $_[0] ) }
      sub yodel { $_[0]->notify_observers }
  
      package Baz;
-     use base qw( Foo );
+     use parent qw( Foo );
      sub yell { $_[0]->notify_observers }
  }
  

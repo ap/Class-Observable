@@ -2,7 +2,8 @@ use strict; use warnings;
 
 package Song;
 
-use base qw( Class::Observable );
+use Class::Observable;
+our @ISA = 'Class::Observable';
 
 sub new {
     my ( $class, $band, $name ) = @_;

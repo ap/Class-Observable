@@ -6,12 +6,12 @@ use Class::Observable;
 
 BEGIN {
     package Foo;
-    use base qw( Class::Observable );
+    our @ISA = qw( Class::Observable );
     sub new { return bless( {}, $_[0] ) }
     sub yodel { $_[0]->notify_observers }
 
     package Baz;
-    use base qw( Foo );
+    our @ISA = qw( Foo );
     sub yell { $_[0]->notify_observers }
 }
 
