@@ -6,6 +6,7 @@ our $VERSION = '1.04';
 
 use Class::ISA;
 
+# Unused; kept for backward compatibility only
 my ( $DEBUG );
 sub DEBUG     { return $DEBUG; }
 sub SET_DEBUG { $DEBUG = $_[0] }
@@ -24,8 +25,6 @@ sub add_observer {
     my ( $item, @observers ) = @_;
     $O{ $item } ||= [];
     foreach my $observer ( @observers ) {
-        DEBUG && warn "Adding observer [$observer] to ",
-                      "[", _describe_item( $item ), "]\n";
         push @{ $O{ $item } }, $observer;
     }
     return scalar @{ $O{ $item } };
@@ -43,12 +42,7 @@ sub delete_observer {
     }
     my %ok_observers = map { $_ => 1 } @{ $O{ $item } };
     foreach my $observer_to_remove ( @observers_to_remove ) {
-        DEBUG && warn "Removing observer [$observer_to_remove] from ",
-                      "[", _describe_item( $item ), "]\n";
         my $removed = delete $ok_observers{ $observer_to_remove };
-        if ( $removed ) {
-            DEBUG && warn "Found observer [$observer_to_remove]; removing\n";
-        }
     }
     $O{ $item } = [ keys %ok_observers ];
     return scalar keys %ok_observers;
@@ -60,8 +54,6 @@ sub delete_observer {
 
 sub delete_all_observers {
     my ( $item ) = @_;
-    DEBUG && warn "Removing all observers from ",
-                  "[", _describe_item( $item ), "]\n";
     my $num_removed = 0;
     return $num_removed unless ( ref $O{ $item } eq 'ARRAY' );
     $num_removed = scalar @{ $O{ $item } };
@@ -82,11 +74,8 @@ sub delete_observers {
 
 sub notify_observers {
     my ( $item, $action, @params ) = @_;
-    DEBUG && warn "Notification from [", _describe_item( $item ), "] ",
-                  "with [$action]\n";
     my @observers = $item->get_observers;
     foreach my $o ( @observers ) {
-        DEBUG && warn "Notifying observer [$o]\n";
         if ( ref $o eq 'CODE' ) {
             $o->( $item, $action, @params );
         }
@@ -102,23 +91,16 @@ sub notify_observers {
 
 sub get_observers {
     my ( $item ) = @_;
-    DEBUG && warn "Retrieving observers using ",
-                  "[", _describe_item( $item ), "]\n";
     my @observers = ();
     my $class = ref $item;
     if ( $class ) {
-        DEBUG && warn "Retrieving object-specific observers from ",
-                      "[", _describe_item( $item ), "]\n";
         push @observers, $item->_obs_get_observers_scoped;
     }
     else {
         $class = $item;
     }
-    DEBUG && warn "Retrieving class-specific observers from [$class] ",
-                  "and its parents\n";
     push @observers, $class->_obs_get_observers_scoped,
                      $class->_obs_get_parent_observers;
-    DEBUG && warn "Found observers [", join( '][', @observers ), "]\n";
     return @observers;
 }
 
@@ -138,7 +120,6 @@ sub copy_observers {
 
 sub count_observers {
     my ( $item ) = @_;
-    DEBUG && warn "Counting observers using [", _describe_item( $item ), "]\n";
     my @observers = $item->get_observers;
     return scalar @observers;
 }
@@ -155,8 +136,6 @@ sub _obs_get_parent_observers {
 
     unless ( ref $P{ $class } eq 'ARRAY' ) {
         my @parent_path = Class::ISA::super_path( $class );
-        DEBUG && warn "Finding observers from parent classes ",
-                      '[', join( '] [', @parent_path ), "]\n";
         my @observable_parents = ();
         foreach my $parent ( @parent_path ) {
             next if ( $parent eq 'Class::Observable' );
@@ -165,8 +144,6 @@ sub _obs_get_parent_observers {
             }
         }
         $P{ $class } = \@observable_parents;
-        DEBUG && warn "Found observable parents for [$class]: ",
-                      '[', join( '] [', @observable_parents ), "]\n";
     }
 
     my @parent_observers = ();
@@ -183,19 +160,6 @@ sub _obs_get_observers_scoped {
     my ( $item ) = @_;
     return () unless ( ref $O{ $item } eq 'ARRAY' );
     return @{ $O{ $item } };
-}
-
-
-# Used in debugging
-
-sub _describe_item {
-    my ( $item ) = @_;
-    return "Class $item" unless ( ref $item );
-    my $item_class = ref $item;
-    if ( $item->can( 'id' ) ) {
-        return "Object of class $item_class with ID ", $item->id();
-    }
-    return "Instance of class $item_class";
 }
 
 
@@ -676,16 +640,6 @@ B<count_observers()>
 Counts the number of observers for an observed item, including ones
 inherited from its class and/or parent classes. See L<Observable
 Classes and Objects> for more information.
-
-B<SET_DEBUG( $bool )>
-
-Turn debugging on or off. This will output warn(s) at appropriate
-times during the process.
-
-Note that the warnings will try to get information about an object if
-that is what calls C<notify_observers()>. If you have an C<id()>
-method in the object it will be called, otherwise it will be described
-as "an instance of class Foo".
 
 =head1 RESOURCES
 
