@@ -1,9 +1,9 @@
 use strict; use warnings;
-use lib qw( ./t ./lib );
 
 use Test::More tests => 17;
 use Class::Observable;
 
+use lib 't/lib';
 use Song;
 use DeeJay;
 
