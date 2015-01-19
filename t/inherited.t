@@ -1,7 +1,3 @@
-# -*-perl-*-
-
-# $Id$
-
 use strict;
 use lib qw( ./t ./lib );
 use Test::More  tests => 19;

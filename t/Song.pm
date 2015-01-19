@@ -1,7 +1,5 @@
 package Song;
 
-# $Id$
-
 use strict;
 use base qw( Class::Observable );
 

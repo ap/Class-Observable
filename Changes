@@ -1,6 +1,6 @@
-Revision history for Perl extension Class::Observable.
+Revision history for Class-Observable
 
-1.04  Sat Oct 16 11:53:03 EDT 2004
+1.04 Sat Oct 16 2004
 
       - Ensure that coderef and object observers are added as weak
       references so we don't have leaks. Add Scalar::Util as
@@ -10,12 +10,12 @@ Revision history for Perl extension Class::Observable.
       logging/error methods.
 
 
-1.03  Wed Jun 16 19:45:18 EDT 2004
+1.03 Wed Jun 16 2004
 
       Fixed typo in Observable.pm, thanks to Dan Langille.
 
 
-1.02  Tue Nov 11 23:50:33 EST 2003
+1.02 Tue Nov 11 2003
 
       - Rename 'delete_observers' to 'delete_all_observers' (preserving
       old name for compatibility)
@@ -25,12 +25,12 @@ Revision history for Perl extension Class::Observable.
       with old version.
 
 
-1.01  Wed Oct 22 08:30:14 EDT 2003
+1.01 Wed Oct 22 2003
 
       Fix tiny POD bug (thanks to forehead@4red.org for spotting).
 
 
-1.00  Fri May  2 09:58:57 EDT 2003
+1.00 Fri May 02 2003
 
       - Add copy_observers() so you can copy observers from one
       observed item to another.
@@ -38,7 +38,7 @@ Revision history for Perl extension Class::Observable.
       - We're stable enough to be a version 1.x!
 
 
-0.03  Mon Aug 19 23:02:13 EDT 2002
+0.03 Mon Aug 19 2002
 
       - Be able to turn debugging on and off programmatically via
       SET_DEBUG()
@@ -48,7 +48,7 @@ Revision history for Perl extension Class::Observable.
       backward compatible.
 
 
-0.02  Tue May 28 09:25:12 EDT 2002
+0.02 Tue May 28 2002
 
       - Modified API to be more like java.util.Observable:
 
@@ -59,7 +59,7 @@ Revision history for Perl extension Class::Observable.
         Updated docs and tests accordingly.
 
 
-0.01  Sun May 26 14:02:30 EDT 2002
+0.01 Sun May 26 2002
 
       Initial version -- it's got tests! It's got documentation!
       

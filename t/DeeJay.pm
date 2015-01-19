@@ -1,7 +1,5 @@
 package DeeJay;
 
-# $Id$
-
 use strict;
 
 sub new {

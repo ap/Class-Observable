@@ -1,7 +1,3 @@
-# -*-perl-*-
-
-# $Id$
-
 use strict;
 use lib qw( ./t ./lib );
 use Test::More  tests => 20;
@@ -59,4 +55,3 @@ is( Song->delete_observer( $dj ), 1,
     'Delete object from class-level observers' );
 is( Song->delete_all_observers, 1,
     'Delete remaining class-level observers' );
-

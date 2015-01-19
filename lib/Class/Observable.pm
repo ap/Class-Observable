@@ -1,7 +1,5 @@
 package Class::Observable;
 
-# $Id$
-
 use strict;
 use Class::ISA;
 
