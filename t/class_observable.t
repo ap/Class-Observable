@@ -1,10 +1,11 @@
 use strict; use warnings;
 use lib qw( ./t ./lib );
-use Test::More  tests => 20;
 
-require_ok( 'Class::Observable' );
-require_ok( 'Song' );
-require_ok( 'DeeJay' );
+use Test::More tests => 17;
+use Class::Observable;
+
+use Song;
+use DeeJay;
 
 my @playlist = ( Song->new( 'U2', 'One' ),
                  Song->new( 'Moby', 'Ah Ah' ),

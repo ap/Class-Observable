@@ -1,6 +1,8 @@
 use strict; use warnings;
 use lib qw( ./t ./lib );
-use Test::More  tests => 19;
+
+use Test::More tests => 18;
+use Class::Observable;
 
 BEGIN {
     package Foo;
@@ -12,8 +14,6 @@ BEGIN {
     use base qw( Foo );
     sub yell { $_[0]->notify_observers }
 }
-
-require_ok( 'Class::Observable' );
 
 my @observations = ();
 sub observer_a { push @observations, "Observation A from [" . ref( $_[0] ) . "]" }
