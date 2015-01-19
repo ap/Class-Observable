@@ -1,6 +1,7 @@
+use strict; use warnings;
+
 package Song;
 
-use strict;
 use base qw( Class::Observable );
 
 sub new {

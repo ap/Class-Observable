@@ -1,8 +1,9 @@
+use strict; use warnings;
+
 package Class::Observable;
 
 our $VERSION = '1.04';
 
-use strict;
 use Class::ISA;
 
 my ( $DEBUG );

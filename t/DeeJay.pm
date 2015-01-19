@@ -1,6 +1,6 @@
-package DeeJay;
+use strict; use warnings;
 
-use strict;
+package DeeJay;
 
 sub new {
     my ( $class, $playlist ) = @_;
@@ -43,8 +43,6 @@ package DeeJay::Selfish;
 
 # This DJ only responds to his/her own songs
 
-use strict;
-
 sub new {
     my ( $class, $my_name ) = @_;
     return bless( { name        => $my_name,
@@ -63,8 +61,6 @@ sub num_updates      { return $_[0]->{update} }
 sub num_updates_self { return $_[0]->{update_self} }
 
 package DeeJay::Helper;
-
-use strict;
 
 sub new { return bless( {}, $_[0] ) }
 
