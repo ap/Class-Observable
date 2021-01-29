@@ -1,11 +1,15 @@
 use ExtUtils::MakeMaker;
 
+#
+
 my %opts = (
     'NAME'          => 'Class::Observable',
     'VERSION_FROM'  => 'lib/Class/Observable.pm',
     'PREREQ_PM'     => { Class::ISA => 0.32,
                          Test::More => 0.40 }
 );
+
+#
 
 if ( $ExtUtils::MakeMaker::VERSION >= 5.43 ) {
     $opts{AUTHOR}   = 'Chris Winters <chris@cwinters.com';
