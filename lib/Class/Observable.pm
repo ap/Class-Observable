@@ -1,9 +1,9 @@
 package Class::Observable;
 
+our $VERSION = '1.04';
+
 use strict;
 use Class::ISA;
-
-$Class::Observable::VERSION = '1.04';
 
 my ( $DEBUG );
 sub DEBUG     { return $DEBUG; }
@@ -202,6 +202,10 @@ sub _describe_item {
 
 __END__
 
+=pod
+
+=encoding UTF-8
+
 =head1 NAME
 
 Class::Observable - Allow other classes and objects to respond to events in yours
@@ -348,6 +352,8 @@ The behavior of the observers is up to you. However, be aware that we
 do not do any error handling from calls to the observers. If an
 observer throws a C<die>, it will bubble up to the observed item and
 require handling there. So be careful.
+
+=head1 USER GUIDE
 
 Throughout this documentation we refer to an 'observed item' or
 'observable item'. This ambiguity refers to the fact that both a class
@@ -704,13 +710,4 @@ L<Class::Trigger|Class::Trigger>
 
 L<Aspect|Aspect>
 
-=head1 COPYRIGHT
-
-Copyright (c) 2002-2004 Chris Winters. All rights reserved.
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=head1 AUTHOR
-
-Chris Winters E<lt>chris@cwinters.comE<gt>
+=pod
