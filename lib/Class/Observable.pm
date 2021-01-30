@@ -107,12 +107,10 @@ sub get_observers {
 # observers from parents.
 
 sub copy_observers {
-    my ( $item_from, $item_to ) = @_;
-    my @from_observers = $item_from->get_observers;
-    foreach my $observer ( @from_observers ) {
-        $item_to->add_observer( $observer );
-    }
-    return scalar @from_observers;
+	my ( $src, $dst ) = @_;
+	my @observer = $src->get_observers;
+	$dst->add_observer( @observer );
+	scalar @observer;
 }
 
 
