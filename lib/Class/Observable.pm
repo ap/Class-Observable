@@ -4,6 +4,7 @@ package Class::Observable;
 
 use strict;
 use Class::ISA;
+use Scalar::Util qw( weaken );
 
 $Class::Observable::VERSION = '1.04';
 
@@ -337,7 +338,7 @@ Class::Observable - Allow other classes and objects to respond to events in your
 
 If you have ever used Java, you may have run across the
 C<java.util.Observable> class and the C<java.util.Observer>
-interface. Using them, you can decouple an object from the one or more
+interface. With them you can decouple an object from the one or more
 objects that wish to be notified whenever particular events occur.
 
 These events occur based on a contract with the observed item. They
@@ -698,10 +699,6 @@ L<http://www.javaworld.com/javaworld/jw-10-1996/jw-10-howto_p.html>
 "Java Tip 29: How to decouple the Observer/Observable object model", Albert Lopez,
 L<http://www.javaworld.com/javatips/jw-javatip29_p.html>
 
-=head1 AUTHOR
-
-Chris Winters E<lt>chris@cwinters.comE<gt>
-
 =head1 SEE ALSO
 
 L<Class::ISA|Class::ISA>
@@ -709,3 +706,14 @@ L<Class::ISA|Class::ISA>
 L<Class::Trigger|Class::Trigger>
 
 L<Aspect|Aspect>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2002-2004 Chris Winters. All rights reserved.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 AUTHOR
+
+Chris Winters E<lt>chris@cwinters.comE<gt>
