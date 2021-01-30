@@ -22,12 +22,8 @@ my %P = ();
 # observable thingy (class or object). Return new number of observers.
 
 sub add_observer {
-    my ( $item, @observers ) = @_;
-    $O{ $item } ||= [];
-    foreach my $observer ( @observers ) {
-        push @{ $O{ $item } }, $observer;
-    }
-    return scalar @{ $O{ $item } };
+	my $invocant = shift;
+	push @{ $O{ $invocant } }, @_;
 }
 
 
