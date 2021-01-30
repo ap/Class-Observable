@@ -116,11 +116,7 @@ sub copy_observers {
 }
 
 
-sub count_observers {
-    my ( $item ) = @_;
-    my @observers = $item->get_observers;
-    return scalar @observers;
-}
+sub count_observers { scalar $_[0]->get_observers }
 
 
 # Find observers from parents
