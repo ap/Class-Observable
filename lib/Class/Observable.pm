@@ -17,9 +17,40 @@ sub observer_error { shift; die @_, "\n" }
 
 my %O = ();
 
+my %registry;
+
+BEGIN {
+	require Config;
+	if ( $^O eq 'Win32' or $Config::Config{'useithreads'} ) {
+		*NEEDS_REGISTRY = sub () { 1 };
+		*CLONE = sub {
+			my $have_warned;
+			foreach my $oldaddr ( keys %registry ) {
+				my $invocant  = delete $registry{ $oldaddr };
+				my $observers = delete $O{ $oldaddr };
+				if ( defined $invocant ) {
+					my  $addr   = refaddr $invocant;
+					$O{ $addr } = $observers;
+					Scalar::Util::weaken( $registry{ $addr } = $invocant );
+				}
+				else {
+					$have_warned++ or warn
+						"*** Inconsistent state ***\n",
+						"Observed instances have gone away " .
+						"without invoking Class::Observable::DESTROY\n";
+				}
+			}
+		};
+	}
+	else {
+		*NEEDS_REGISTRY = sub () { 0 };
+	}
+}
+
 sub DESTROY {
 	my $invocant = shift;
 	my $addr = refaddr $invocant;
+	delete $registry{ $addr } if NEEDS_REGISTRY and $addr;
 	delete $O{ $addr || "::$invocant" };
 }
 
@@ -30,6 +61,7 @@ sub DESTROY {
 sub add_observer {
 	my $invocant = shift;
 	my $addr = refaddr $invocant;
+	Scalar::Util::weaken( $registry{ $addr } = $invocant ) if NEEDS_REGISTRY and $addr;
 	push @{ $O{ $addr || "::$invocant" } }, @_;
 }
 
@@ -44,6 +76,7 @@ sub delete_observer {
 	my %removal = map +( refaddr( $_ ) || "::$_" => 1 ), @_;
 	@$observers = grep !$removal{ refaddr( $_ ) || "::$_" }, @$observers;
 	if ( ! @$observers ) {
+		delete $registry{ $addr } if NEEDS_REGISTRY and $addr;
 		delete $O{ $addr || "::$invocant" };
 	}
 	scalar @$observers;
@@ -56,6 +89,7 @@ sub delete_observer {
 sub delete_all_observers {
 	my $invocant = shift;
 	my $addr = refaddr $invocant;
+	delete $registry{ $addr } if NEEDS_REGISTRY and $addr;
 	my $removed = delete $O{ $addr || "::$invocant" };
 	$removed ? scalar @$removed : 0;
 }

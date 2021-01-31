@@ -10,6 +10,7 @@ my %META = (
 	prereqs     => {
 		runtime => { requires => {qw(
 			perl                   5.006
+			Config                     0
 			Scalar::Util            1.14
 			Class::ISA              0.32
 		)} },
