@@ -15,7 +15,6 @@ sub observer_error { shift; die @_, "\n" }
 
 
 my %O = ();
-my %P = ();
 
 
 # Add one or more observers (class name, object or subroutine) to an
@@ -80,19 +79,24 @@ sub notify_observers {
 # Retrieve *all* observers for a particular thingy. (See docs for what
 # *all* means.) Returns a list of observers
 
+my %supers;
 sub get_observers {
-    my ( $item ) = @_;
-    my @observers = ();
-    my $class = ref $item;
-    if ( $class ) {
-        push @observers, $item->_obs_get_observers_scoped;
-    }
-    else {
-        $class = $item;
-    }
-    push @observers, $class->_obs_get_observers_scoped,
-                     $class->_obs_get_parent_observers;
-    return @observers;
+	my ( @self, $class );
+	if ( my $pkg = ref $_[0] ) {
+		@self  = $_[0];
+		$class = $pkg;
+	}
+	else {
+		$class = $_[0];
+	}
+
+	# We only find the parents the first time, so if you muck with
+	# @ISA you'll get unexpected behavior...
+	my $cached_supers = $supers{ $class } ||= [
+		grep $_->isa( 'Class::Observable' ), Class::ISA::super_path( $class )
+	];
+
+	map $_->get_direct_observers, @self, $class, @$cached_supers;
 }
 
 
@@ -110,41 +114,12 @@ sub copy_observers {
 sub count_observers { scalar $_[0]->get_observers }
 
 
-# Find observers from parents
-
-sub _obs_get_parent_observers {
-    my ( $item ) = @_;
-    my $class = ref $item || $item;
-
-    # We only find the parents the first time, so if you muck with
-    # @ISA you'll get unexpected behavior...
-
-    unless ( ref $P{ $class } eq 'ARRAY' ) {
-        my @parent_path = Class::ISA::super_path( $class );
-        my @observable_parents = ();
-        foreach my $parent ( @parent_path ) {
-            next if ( $parent eq 'Class::Observable' );
-            if ( $parent->isa( 'Class::Observable' ) ) {
-                push @observable_parents, $parent;
-            }
-        }
-        $P{ $class } = \@observable_parents;
-    }
-
-    my @parent_observers = ();
-    foreach my $parent ( @{ $P{ $class } } ) {
-        push @parent_observers, $parent->_obs_get_observers_scoped;
-    }
-    return @parent_observers;
-}
-
-
 # Return observers ONLY for the specified item
 
-sub _obs_get_observers_scoped {
-    my ( $item ) = @_;
-    return () unless ( ref $O{ $item } eq 'ARRAY' );
-    return @{ $O{ $item } };
+sub get_direct_observers {
+	my $invocant = shift;
+	my $observers = $O{ $invocant } or return wantarray ? () : 0;
+	@$observers;
 }
 
 
