@@ -49,12 +49,9 @@ sub delete_observer {
 # observers removed.
 
 sub delete_all_observers {
-    my ( $item ) = @_;
-    my $num_removed = 0;
-    return $num_removed unless ( ref $O{ $item } eq 'ARRAY' );
-    $num_removed = scalar @{ $O{ $item } };
-    $O{ $item } = [];
-    return $num_removed;
+	my $invocant = shift;
+	my $removed = delete $O{ $invocant };
+	$removed ? scalar @$removed : 0;
 }
 
 
