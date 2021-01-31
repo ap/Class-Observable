@@ -23,7 +23,8 @@ my %O = ();
 
 sub add_observer {
 	my $invocant = shift;
-	push @{ $O{ $invocant } }, @_;
+	my $addr = refaddr $invocant;
+	push @{ $O{ $addr || "::$invocant" } }, @_;
 }
 
 
@@ -32,11 +33,12 @@ sub add_observer {
 
 sub delete_observer {
 	my $invocant = shift;
-	my $observers = $O{ $invocant } or return 0;
+	my $addr = refaddr $invocant;
+	my $observers = $O{ $addr || "::$invocant" } or return 0;
 	my %removal = map +( refaddr( $_ ) || "::$_" => 1 ), @_;
 	@$observers = grep !$removal{ refaddr( $_ ) || "::$_" }, @$observers;
 	if ( ! @$observers ) {
-		delete $O{ $invocant };
+		delete $O{ $addr || "::$invocant" };
 	}
 	scalar @$observers;
 }
@@ -47,7 +49,8 @@ sub delete_observer {
 
 sub delete_all_observers {
 	my $invocant = shift;
-	my $removed = delete $O{ $invocant };
+	my $addr = refaddr $invocant;
+	my $removed = delete $O{ $addr || "::$invocant" };
 	$removed ? scalar @$removed : 0;
 }
 
@@ -109,7 +112,8 @@ sub count_observers { scalar $_[0]->get_observers }
 
 sub get_direct_observers {
 	my $invocant = shift;
-	my $observers = $O{ $invocant } or return wantarray ? () : 0;
+	my $addr = refaddr $invocant;
+	my $observers = $O{ $addr || "::$invocant" } or return wantarray ? () : 0;
 	@$observers;
 }
 
