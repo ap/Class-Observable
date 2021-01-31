@@ -17,6 +17,12 @@ sub observer_error { shift; die @_, "\n" }
 
 my %O = ();
 
+sub DESTROY {
+	my $invocant = shift;
+	my $addr = refaddr $invocant;
+	delete $O{ $addr || "::$invocant" };
+}
+
 
 # Add one or more observers (class name, object or subroutine) to an
 # observable thingy (class or object). Return new number of observers.
@@ -443,19 +449,45 @@ B<Object observer>:
 
 =head2 Observable Objects and DESTROY
 
-One problem with this module relates to observing objects. Once the
-object goes out of scope, its observers will still be hanging
-around. For one-off scripts this is not a problem, but for long-lived
-processes this could be a memory leak.
+This class has a C<DESTROY> method which B<must> run
+when an instance of an observable class goes out of scope
+in order to clean up the observers added to that instance.
 
-To take care of this, it is a good idea to explicitly release
-observers attached to an object in the C<DESTROY> method. This should
-suffice:
+If there is no other destructor in the inheritance tree,
+this will end up happening naturally and everything will be fine.
 
+If it does not get called, then the list of observers B<will leak>
+(which also prevents the observers in it from being garbage-collected)
+and B<may become associated with a different instance>
+created later at the same memory address as a previous instance.
+
+This may happen if a class needs its own C<DESTROY> method
+when it also wants to inherit from Class::Observer (even indirectly!),
+because perl only invokes the single nearest inherited C<DESTROY>.
+
+The most straightforward (but maybe not best) way to ensure that
+the destructor is called is to do something like this:
+
+  # in My::Class
   sub DESTROY {
-      my ( $self ) = @_;
-      $self->delete_all_observers;
+      # ...
+      $self->Class::Observable::DESTROY;
+      # ...
   }
+
+A better way may be to to write all destructors in your class hierarchy
+with the expectation that all of them will be called
+(which would usually be preferred anyway)
+and then enforcing that expectation by writing all of them as follows:
+
+  use mro;
+  sub DESTROY {
+      # ...
+      $self->maybe::next::method;
+      # ...
+  }
+
+(Perl being Perl, of course, there are many other ways to go about this.)
 
 =head1 METHODS
 
