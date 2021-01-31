@@ -63,16 +63,9 @@ sub delete_all_observers {
 # value.
 
 sub notify_observers {
-    my ( $item, $action, @params ) = @_;
-    my @observers = $item->get_observers;
-    foreach my $o ( @observers ) {
-        if ( ref $o eq 'CODE' ) {
-            $o->( $item, $action, @params );
-        }
-        else {
-            $o->update( $item, $action, @params );
-        }
-    }
+	for ( $_[0]->get_observers ) {
+		ref eq 'CODE' ? $_->( @_ ) : $_->update( @_ );
+	}
 }
 
 
