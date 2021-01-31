@@ -4,6 +4,7 @@ package Class::Observable;
 
 our $VERSION = '1.04';
 
+use Scalar::Util 'refaddr';
 use Class::ISA;
 
 # Unused; kept for backward compatibility only
@@ -28,19 +29,16 @@ sub add_observer {
 
 # Remove one or more observers from an observable thingy. Return new
 # number of observers.
-# TODO: Will this work with subroutines?
 
 sub delete_observer {
-    my ( $item, @observers_to_remove ) = @_;
-    unless ( ref $O{ $item } eq 'ARRAY' ) {
-        return 0;
-    }
-    my %ok_observers = map { $_ => 1 } @{ $O{ $item } };
-    foreach my $observer_to_remove ( @observers_to_remove ) {
-        my $removed = delete $ok_observers{ $observer_to_remove };
-    }
-    $O{ $item } = [ keys %ok_observers ];
-    return scalar keys %ok_observers;
+	my $invocant = shift;
+	my $observers = $O{ $invocant } or return 0;
+	my %removal = map +( refaddr( $_ ) || "::$_" => 1 ), @_;
+	@$observers = grep !$removal{ refaddr( $_ ) || "::$_" }, @$observers;
+	if ( ! @$observers ) {
+		delete $O{ $invocant };
+	}
+	scalar @$observers;
 }
 
 
