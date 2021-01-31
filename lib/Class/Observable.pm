@@ -4,7 +4,6 @@ package Class::Observable;
 
 use strict;
 use Class::ISA;
-use Scalar::Util qw( weaken );
 
 $Class::Observable::VERSION = '1.04';
 
