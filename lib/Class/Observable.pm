@@ -5,11 +5,13 @@ package Class::Observable;
 use strict;
 use Class::ISA;
 
-$Class::Observable::VERSION = '1.03';
+$Class::Observable::VERSION = '1.04';
 
 my ( $DEBUG );
 sub DEBUG     { return $DEBUG; }
 sub SET_DEBUG { $DEBUG = $_[0] }
+sub observer_log   { shift; $DEBUG && warn @_, "\n" }
+sub observer_error { shift; die @_, "\n" }
 
 
 my %O = ();
