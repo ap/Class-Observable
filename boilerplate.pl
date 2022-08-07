@@ -19,13 +19,13 @@ my $license = do {
 	$class->new( $meta->custom( 'x_copyright' ) );
 };
 
-my $old_notice = "This software is copyright (c) 2002-2004 Chris Winters.\n";
+my $old_notice = "This documentation is copyright (c) 2002-2004 Chris Winters.\n";
 
 $file{'LICENSE'} = $old_notice . $license->fulltext;
 
 my @source = slurp 'lib/Class/Observable.pm';
 splice @source, -2, 0, map "$_\n", '', '=head1 AUTHOR', '', $meta->authors;
-splice @source, -2, 0, split /(?<=\n)/, "\n=head1 COPYRIGHT AND LICENSE\n\n$old_notice" . $license->notice;
+splice @source, -2, 0, split /(?<=\n)/, "\n=head1 COPYRIGHT AND LICENSE\n\n$old_notice\n" . $license->notice;
 $file{'lib/Class/Observable.pm'} = join '', @source;
 
 die unless -e 'Makefile.PL';

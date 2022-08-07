@@ -4,7 +4,7 @@ my $u = 'github.com/ap/Class-Observable';
 
 my %META = (
 	name        => 'Class-Observable',
-	author      => 'Chris Winters <chris@cwinters.com>',
+	author      => [ 'Aristotle Pagaltzis <pagaltzis@gmx.de>', 'Chris Winters' ],
 	license     => 'perl_5',
 	x_copyright => { holder => 'Aristotle Pagaltzis', year => 2021 },
 	prereqs     => {
