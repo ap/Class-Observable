@@ -648,4 +648,4 @@ L<Class::Trigger|Class::Trigger>
 
 L<Aspect|Aspect>
 
-=pod
+=cut
