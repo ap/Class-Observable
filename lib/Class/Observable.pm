@@ -32,8 +32,7 @@ BEGIN {
 					my  $addr   = refaddr $invocant;
 					$O{ $addr } = $observers;
 					Scalar::Util::weaken( $registry{ $addr } = $invocant );
-				}
-				else {
+				} else {
 					$have_warned++ or warn
 						"*** Inconsistent state ***\n",
 						"Observed instances have gone away " .
@@ -41,8 +40,7 @@ BEGIN {
 				}
 			}
 		};
-	}
-	else {
+	} else {
 		*NEEDS_REGISTRY = sub () { 0 };
 	}
 }
@@ -94,9 +92,7 @@ sub delete_all_observers {
 	$removed ? scalar @$removed : 0;
 }
 
-
 # Backward compatibility
-
 *delete_observers = \&delete_all_observers;
 
 
@@ -119,8 +115,7 @@ sub get_observers {
 	if ( my $pkg = ref $_[0] ) {
 		@self  = $_[0];
 		$class = $pkg;
-	}
-	else {
+	} else {
 		$class = $_[0];
 	}
 
@@ -544,8 +539,7 @@ Example:
      eval { $self->_remove_item_from_datastore };
      if ( $@ ) {
          $self->notify_observers( 'remove-fail', error_message => $@ );
-     }
-     else {
+     } else {
          $self->notify_observers( 'remove' );
      }
  }
