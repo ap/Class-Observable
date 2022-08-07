@@ -8,22 +8,26 @@ my %META = (
 	author      => [ 'Aristotle Pagaltzis <pagaltzis@gmx.de>', 'Chris Winters' ],
 	license     => 'perl_5',
 	x_copyright => { holder => 'Aristotle Pagaltzis', year => 2021 },
-	prereqs     => {
-		runtime => { requires => {qw(
-			perl                   5.006
-			Config                     0
-			Scalar::Util            1.14
-			Class::ISA              0.32
-		)} },
-		test => { requires => {qw(
-			Test::More                 0
-		)} },
-	},
-	dynamic_config => 0,
-	resources      => {
+	resources   => {
 		license    => [ 'http://dev.perl.org/licenses/' ],
 		repository => { type => 'git', url => "$sc.git", web => $sc },
 		bugtracker => { web => $bt },
+	},
+	dynamic_config => 0,
+	prereqs => {
+		runtime => {
+			requires => {qw(
+				perl 5.006
+				Config 0
+				Scalar::Util 1.14
+				Class::ISA 0.32
+			)},
+		},
+		test => {
+			requires => {qw(
+				Test::More 0
+			)},
+		},
 	},
 );
 
