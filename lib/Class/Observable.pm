@@ -14,10 +14,7 @@ sub SET_DEBUG { $DEBUG = $_[0] }
 sub observer_log   { shift; $DEBUG && warn @_, "\n" }
 sub observer_error { shift; die @_, "\n" }
 
-
-my %O = ();
-
-my %registry;
+my ( %O, %registry );
 
 BEGIN {
 	require Config;
@@ -52,20 +49,12 @@ sub DESTROY {
 	delete $O{ $addr || "::$invocant" };
 }
 
-
-# Add one or more observers (class name, object or subroutine) to an
-# observable thingy (class or object). Return new number of observers.
-
 sub add_observer {
 	my $invocant = shift;
 	my $addr = refaddr $invocant;
 	Scalar::Util::weaken( $registry{ $addr } = $invocant ) if NEEDS_REGISTRY and $addr;
 	push @{ $O{ $addr || "::$invocant" } }, @_;
 }
-
-
-# Remove one or more observers from an observable thingy. Return new
-# number of observers.
 
 sub delete_observer {
 	my $invocant = shift;
@@ -80,10 +69,6 @@ sub delete_observer {
 	scalar @$observers;
 }
 
-
-# Remove all observers from an observable thingy. Return number of
-# observers removed.
-
 sub delete_all_observers {
 	my $invocant = shift;
 	my $addr = refaddr $invocant;
@@ -95,19 +80,11 @@ sub delete_all_observers {
 # Backward compatibility
 *delete_observers = \&delete_all_observers;
 
-
-# Tell all observers that a state-change has occurred. No return
-# value.
-
 sub notify_observers {
 	for ( $_[0]->get_observers ) {
 		ref eq 'CODE' ? $_->( @_ ) : $_->update( @_ );
 	}
 }
-
-
-# Retrieve *all* observers for a particular thingy. (See docs for what
-# *all* means.) Returns a list of observers
 
 my %supers;
 sub get_observers {
@@ -128,10 +105,6 @@ sub get_observers {
 	map $_->get_direct_observers, @self, $class, @$cached_supers;
 }
 
-
-# Copy all observers from one item to another. This also copies
-# observers from parents.
-
 sub copy_observers {
 	my ( $src, $dst ) = @_;
 	my @observer = $src->get_observers;
@@ -139,11 +112,7 @@ sub copy_observers {
 	scalar @observer;
 }
 
-
 sub count_observers { scalar $_[0]->get_observers }
-
-
-# Return observers ONLY for the specified item
 
 sub get_direct_observers {
 	my $invocant = shift;
@@ -151,7 +120,6 @@ sub get_direct_observers {
 	my $observers = $O{ $addr || "::$invocant" } or return wantarray ? () : 0;
 	@$observers;
 }
-
 
 1;
 
