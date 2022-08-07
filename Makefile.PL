@@ -1,6 +1,7 @@
 use 5.006; use strict; use warnings;
 
-my $u = 'github.com/ap/Class-Observable';
+my $sc = q<https://github.com/ap/Class-Observable>;
+my $bt = q<https://rt.cpan.org/Public/Dist/Display.html?Name=Class-Observable>;
 
 my %META = (
 	name        => 'Class-Observable',
@@ -20,8 +21,9 @@ my %META = (
 	},
 	dynamic_config => 0,
 	resources      => {
-		repository => { type => 'git', url => "git://$u.git", web => "https://$u" },
-		bugtracker => { web => "https://$u/issues" },
+		license    => [ 'http://dev.perl.org/licenses/' ],
+		repository => { type => 'git', url => "$sc.git", web => $sc },
+		bugtracker => { web => $bt },
 	},
 );
 
