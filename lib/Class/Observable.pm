@@ -2,7 +2,7 @@ use strict; use warnings;
 
 package Class::Observable;
 
-our $VERSION = '2.002';
+our $VERSION = '2.003';
 
 use Scalar::Util 'refaddr';
 use Class::ISA;
